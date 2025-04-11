@@ -14,9 +14,18 @@ const RealEstate = () => {
   const textColor = useColorModeValue('gray.800', 'white')
   const bgColor = useColorModeValue('white', 'gray.800')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
 
   const handleBackToServices = () => {
     navigateAndScrollTop(navigate, '/services')
+  }
+
+  const handleGetQuote = () => {
+    navigateAndScrollTop(navigate, '/contact')
   }
 
   const features = [
@@ -129,13 +138,22 @@ const RealEstate = () => {
               <Button
                 size="lg"
                 colorScheme="blue"
-                onClick={() => navigate('/contact')}
+                onClick={handleGetQuote}
                 px={8}
                 py={6}
                 fontSize="lg"
-                w={{ base: '100%', lg: 'auto' }}
-                _hover={{ transform: 'translateY(-2px)', boxShadow: 'md' }}
-                transition="all 0.2s"
+                bgGradient={buttonGradient}
+                color="white"
+                _hover={{
+                  bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 0 20px ${glowColor}`
+                }}
+                _active={{
+                  bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+                  transform: 'translateY(0)'
+                }}
+                transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
               >
                 Get a Quote
               </Button>

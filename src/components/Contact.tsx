@@ -34,6 +34,15 @@ const Contact = () => {
   const textColor = useColorModeValue('gray.800', 'white')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
   const inputBg = useColorModeValue('white', 'gray.700')
+  const gradientBg = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.600 0%, purple.700 100%)'
+  )
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
 
   const contactInfo = [
     {
@@ -134,12 +143,12 @@ const Contact = () => {
         w="300px"
         h="300px"
         borderRadius="full"
-        bg={useColorModeValue('blue.100', 'blue.900')}
-        opacity="0.3"
+        bgGradient="linear-gradient(135deg, blue.400 0%, purple.500 100%)"
+        opacity="0.15"
         filter="blur(60px)"
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.4, 0.3],
+          opacity: [0.15, 0.25, 0.15],
         }}
         transition={{
           duration: 8,
@@ -155,12 +164,12 @@ const Contact = () => {
         w="250px"
         h="250px"
         borderRadius="full"
-        bg={useColorModeValue('purple.100', 'purple.900')}
-        opacity="0.3"
+        bgGradient="linear-gradient(135deg, purple.400 0%, pink.500 100%)"
+        opacity="0.15"
         filter="blur(60px)"
         animate={{
           scale: [1, 1.1, 1],
-          opacity: [0.2, 0.3, 0.2],
+          opacity: [0.1, 0.2, 0.1],
         }}
         transition={{
           duration: 6,
@@ -289,12 +298,23 @@ const Contact = () => {
 
                   <Button
                     type="submit"
-                    colorScheme="blue"
                     size="lg"
                     w="100%"
                     isLoading={isSubmitting}
                     loadingText="Sending..."
                     rightIcon={<FaArrowRight />}
+                    bgGradient={buttonGradient}
+                    color="white"
+                    _hover={{
+                      bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: `0 0 20px ${glowColor}`
+                    }}
+                    _active={{
+                      bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+                      transform: 'translateY(0)'
+                    }}
+                    transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
                   >
                     Send Message
                   </Button>
@@ -332,10 +352,16 @@ const Contact = () => {
                       <HStack spacing={4}>
                         <Box
                           p={3}
-                          bg={iconBg}
+                          bgGradient="linear-gradient(135deg, blue.400 0%, purple.500 100%)"
                           borderRadius="lg"
+                          _hover={{
+                            bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                            transform: 'translateY(-2px)',
+                            boxShadow: `0 0 15px ${glowColor}`
+                          }}
+                          transition="all 0.2s"
                         >
-                          <Icon as={info.icon} boxSize={6} color={iconColor} />
+                          <Icon as={info.icon} boxSize={6} color="white" />
                         </Box>
                         <VStack align="start" spacing={1}>
                           <Text fontWeight="bold" color={textColor}>

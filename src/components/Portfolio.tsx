@@ -19,61 +19,104 @@ const floatAnimation = keyframes`
   100% { transform: translateY(0px); }
 `
 
-const PortfolioCard = ({ title, description, imageUrl, category }: { 
+const PortfolioCard = ({ title, description, imageUrl, category, cardGradient }: { 
   title: string
   description: string
   imageUrl: string
   category: string
+  cardGradient: string
 }) => {
   const navigate = useNavigate()
   const bgColor = useColorModeValue('white', 'gray.800')
   const textColor = useColorModeValue('gray.800', 'white')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
   const shadowColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)')
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
 
   const handleViewDetails = () => {
     navigateAndScrollTop(navigate, `/portfolio/${category}`)
   }
 
   return (
-    <MotionBox
-      bg={bgColor}
+    <Box
+      key={category}
+      p={6}
       borderRadius="xl"
+      bgGradient={cardGradient}
+      boxShadow="lg"
+      transition="all 0.3s ease"
+      _hover={{
+        transform: 'translateY(-5px)',
+        boxShadow: 'xl',
+      }}
+      h="100%"
+      display="flex"
+      flexDirection="column"
+      position="relative"
       overflow="hidden"
-      boxShadow={`0 4px 20px ${shadowColor}`}
-      _hover={{ transform: 'translateY(-5px)', boxShadow: `0 8px 30px ${shadowColor}` }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      _before={{
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundImage: useColorModeValue(
+          'radial-gradient(circle at 20% 20%, rgba(66, 153, 225, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(159, 122, 234, 0.05) 0%, transparent 50%)',
+          'radial-gradient(circle at 20% 20%, rgba(66, 153, 225, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(159, 122, 234, 0.1) 0%, transparent 50%)'
+        ),
+        zIndex: 0,
+      }}
     >
-      <Box h="250px" overflow="hidden">
-        <MotionImage
+      <Box flex="1" position="relative" zIndex={1}>
+        <Image
           src={imageUrl}
           alt={title}
-          w="100%"
-          h="100%"
+          borderRadius="lg"
+          mb={4}
           objectFit="cover"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
+          w="100%"
+          h="200px"
+          transition="all 0.3s ease"
+          _hover={{
+            transform: 'scale(1.02)',
+          }}
         />
+        <Heading size="lg" mb={4} color={textColor}>
+          {title}
+        </Heading>
+        <Text color={useColorModeValue('gray.600', 'gray.300')} mb={6}>
+          {description}
+        </Text>
       </Box>
-      <VStack p={6} align="start" spacing={4}>
-        <Heading size="md" color={textColor}>{title}</Heading>
-        <Text color={useColorModeValue('gray.600', 'gray.300')}>{description}</Text>
-        <Button
-          variant="outline"
-          colorScheme="blue"
-          onClick={handleViewDetails}
-          size="sm"
-          rightIcon={<FaArrowRight />}
-          _hover={{ transform: 'translateX(5px)' }}
-          transition="all 0.2s"
-        >
-          View Details
-        </Button>
-      </VStack>
-    </MotionBox>
+      <Button
+        onClick={handleViewDetails}
+        size="sm"
+        alignSelf="flex-start"
+        mt="auto"
+        bgGradient={buttonGradient}
+        color="white"
+        _hover={{
+          bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+          transform: 'translateX(5px)',
+          boxShadow: `0 0 15px ${glowColor}`,
+          opacity: 0.9
+        }}
+        _active={{
+          bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+          transform: 'translateX(0)'
+        }}
+        transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
+        position="relative"
+        zIndex={1}
+      >
+        View Details
+      </Button>
+    </Box>
   )
 }
 
@@ -81,6 +124,19 @@ const Portfolio = () => {
   const navigate = useNavigate()
   const textColor = useColorModeValue('gray.800', 'white')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
+  const cardGradient = useColorModeValue(
+    'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(250,250,250,1) 100%)',
+    'linear-gradient(180deg, rgba(26,32,44,1) 0%, rgba(23,25,35,1) 100%)'
+  )
+  const sectionGradient = useColorModeValue(
+    'linear-gradient(135deg, #E0F2FE 0%, #F0F9FF 50%, #E0F2FE 100%)',
+    'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #1E3A8A 100%)'
+  )
 
   const handleStartProject = () => {
     navigateAndScrollTop(navigate, '/contact')
@@ -117,9 +173,10 @@ const Portfolio = () => {
     <Box
       as="section"
       py={{ base: 16, md: 20 }}
-      bg={useColorModeValue('gray.50', 'gray.900')}
+      bg="white"
+      position="relative"
     >
-      <Container maxW="1200px">
+      <Container maxW="1200px" position="relative" zIndex={1}>
         <VStack spacing={{ base: 12, md: 16 }} align="center" mb={{ base: 12, md: 16 }}>
           <MotionBox
             initial={{ opacity: 0, y: -20 }}
@@ -133,6 +190,8 @@ const Portfolio = () => {
               textTransform="uppercase"
               letterSpacing="wider"
               textAlign="center"
+              bgGradient={buttonGradient}
+              bgClip="text"
             >
               Our Portfolio
             </Text>
@@ -175,6 +234,7 @@ const Portfolio = () => {
               description={project.description}
               imageUrl={project.imageUrl}
               category={project.category}
+              cardGradient={cardGradient}
             />
           ))}
         </MotionSimpleGrid>
@@ -193,10 +253,20 @@ const Portfolio = () => {
             px={8}
             py={6}
             fontSize="lg"
-            _hover={{ transform: 'translateY(-2px)', boxShadow: 'md' }}
-            transition="all 0.2s"
+            bgGradient={buttonGradient}
+            color="white"
+            _hover={{
+              bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+              transform: 'translateY(-2px)',
+              boxShadow: `0 0 20px ${glowColor}`
+            }}
+            _active={{
+              bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+              transform: 'translateY(0)'
+            }}
+            transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
           >
-            Start Your Project
+            Get a Quote
           </Button>
         </MotionBox>
       </Container>

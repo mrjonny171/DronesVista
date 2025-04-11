@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import { logger } from '../utils/logger'
 import { navigateAndScrollTop } from '../utils/navigation'
+import { Icon } from '@chakra-ui/react'
 
 const MotionBox = motion(Box)
 const MotionHeading = motion(Heading)
@@ -21,6 +22,11 @@ const ServiceCard = ({ title, description, imageUrl, serviceId }: {
   const textColor = useColorModeValue('gray.800', 'white')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
   const shadowColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)')
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
 
   const handleLearnMore = () => {
     logger.info(`Navigating to service: ${serviceId}`, { serviceId })
@@ -60,16 +66,25 @@ const ServiceCard = ({ title, description, imageUrl, serviceId }: {
           <Text color={useColorModeValue('gray.600', 'gray.300')} minH="80px">{description}</Text>
         </Box>
         <Button
-          variant="outline"
-          colorScheme="blue"
           onClick={handleLearnMore}
           size="sm"
-          _hover={{ transform: 'translateX(5px)' }}
-          transition="all 0.2s"
           alignSelf="flex-start"
           mt="auto"
+          bgGradient={buttonGradient}
+          color="white"
+          _hover={{
+            bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+            transform: 'translateX(5px)',
+            boxShadow: `0 0 15px ${glowColor}`,
+            opacity: 0.9
+          }}
+          _active={{
+            bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+            transform: 'translateX(0)'
+          }}
+          transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
         >
-          Learn More
+          View Details
         </Button>
       </VStack>
     </MotionBox>

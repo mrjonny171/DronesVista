@@ -1,12 +1,26 @@
+import React, { useState, useEffect } from 'react'
 import { Box, Container, Heading, Text, Button, VStack, HStack, useColorModeValue, Image, Flex } from '@chakra-ui/react'
-import { FaArrowRight } from 'react-icons/fa'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { FaCamera, FaVideo, FaMapMarkedAlt, FaLeaf } from 'react-icons/fa'
 import { navigateAndScrollTop } from '../utils/navigation'
 
 const MotionBox = motion(Box)
 const MotionImage = motion(Image)
+
+const images = [
+  {
+    src: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    alt: "Drone in action"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1506947411487-a56738267384?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    alt: "Aerial view of landscape"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    alt: "Drone photography"
+  }
+]
 
 const Hero = () => {
   const navigate = useNavigate()
@@ -14,6 +28,13 @@ const Hero = () => {
   const bgColor = useColorModeValue('white', 'gray.800')
   const accentColor = useColorModeValue('blue.500', 'blue.300')
   const shadowColor = useColorModeValue('rgba(0, 0, 0, 0.1)', 'rgba(0, 0, 0, 0.3)')
+  const buttonGradient = useColorModeValue(
+    'linear-gradient(135deg, blue.400 0%, purple.500 100%)',
+    'linear-gradient(135deg, blue.500 0%, purple.600 100%)'
+  )
+  const glowColor = useColorModeValue('rgba(66, 153, 225, 0.6)', 'rgba(99, 179, 237, 0.6)')
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   const handleContactClick = () => {
     navigateAndScrollTop(navigate, '/contact')
@@ -22,6 +43,19 @@ const Hero = () => {
   const handlePortfolioClick = () => {
     navigateAndScrollTop(navigate, '/portfolio')
   }
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
+  }
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)
+  }
+
+  useEffect(() => {
+    const timer = setInterval(nextImage, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <Box
@@ -74,37 +108,80 @@ const Hero = () => {
               </Text>
             </VStack>
 
-            <HStack spacing={{ base: 6, lg: 4 }} w={{ base: '100%', lg: 'auto' }} justify={{ base: 'center', lg: 'flex-start' }}>
+            <HStack spacing={{ base: 3, lg: 4 }} w={{ base: '100%', lg: 'auto' }} justify={{ base: 'center', lg: 'flex-start' }}>
               <Button
-                size="lg"
-                colorScheme="blue"
+                size={{ base: "md", md: "lg" }}
                 onClick={handleContactClick}
-                px={8}
-                py={6}
-                fontSize="lg"
-                _hover={{ transform: 'translateY(-2px)', boxShadow: 'md' }}
-                transition="all 0.2s"
+                px={{ base: 4, md: 8 }}
+                py={{ base: 5, md: 6 }}
+                fontSize={{ base: "sm", md: "lg" }}
+                bgGradient={buttonGradient}
+                color="white"
+                flexBasis={{ base: '50%', lg: 'auto' }}
+                _hover={{
+                  bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 0 20px ${glowColor}`
+                }}
+                _active={{
+                  bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+                  transform: 'translateY(0)'
+                }}
+                transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
               >
                 Get in Touch
               </Button>
               <Button
-                size="lg"
-                variant="outline"
-                color={textColor}
-                borderColor={textColor}
-                _hover={{ bg: useColorModeValue('gray.100', 'whiteAlpha.200') }}
+                size={{ base: "md", md: "lg" }}
                 onClick={handlePortfolioClick}
-                px={{ base: 6, lg: 8 }}
-                py={{ base: 7, lg: 6 }}
-                fontSize="lg"
-                w={{ base: '100%', lg: 'auto' }}
+                px={{ base: 4, md: 8 }}
+                py={{ base: 5, md: 6 }}
+                fontSize={{ base: "sm", md: "lg" }}
+                flexBasis={{ base: '50%', lg: 'auto' }}
+                bg="white"
+                color="transparent"
+                bgClip="text"
+                bgGradient={buttonGradient}
+                borderWidth="2px"
+                borderColor="transparent"
+                position="relative"
+                _before={{
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  borderRadius: 'md',
+                  padding: '2px',
+                  bgGradient: buttonGradient,
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                }}
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 0 20px ${glowColor}`,
+                  bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                  _before: {
+                    bgGradient: 'linear-gradient(135deg, blue.500 0%, purple.600 100%)',
+                  }
+                }}
+                _active={{
+                  transform: 'translateY(0)',
+                  bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+                  _before: {
+                    bgGradient: 'linear-gradient(135deg, blue.600 0%, purple.700 100%)',
+                  }
+                }}
+                transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
               >
                 View Portfolio
               </Button>
             </HStack>
           </VStack>
 
-          {/* Right Content - Animated Drone Image */}
+          {/* Right Content - Image Carousel */}
           <MotionBox
             position="relative"
             w={{ base: '100%', lg: '40%' }}
@@ -114,24 +191,47 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             mt={{ base: 8, lg: 0 }}
           >
-            <MotionImage
-              src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-              alt="Drone"
-              objectFit="cover"
-              w="100%"
-              h="100%"
-              borderRadius="xl"
-              boxShadow="lg"
-              animate={{ 
-                y: [0, -10, 0],
-                rotate: [0, 2, 0]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
+            <AnimatePresence mode="wait">
+              <MotionImage
+                key={currentImageIndex}
+                src={images[currentImageIndex].src}
+                alt={images[currentImageIndex].alt}
+                objectFit="cover"
+                w="100%"
+                h="100%"
+                borderRadius="xl"
+                boxShadow="lg"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
+            </AnimatePresence>
+
+            {/* Dots Indicator */}
+            <HStack
+              position="absolute"
+              bottom={4}
+              left="50%"
+              transform="translateX(-50%)"
+              spacing={2}
+            >
+              {images.map((_, index) => (
+                <Box
+                  key={index}
+                  w={2}
+                  h={2}
+                  borderRadius="full"
+                  bg={index === currentImageIndex ? accentColor : "white"}
+                  opacity={index === currentImageIndex ? 1 : 0.5}
+                  cursor="pointer"
+                  onClick={() => setCurrentImageIndex(index)}
+                  transition="all 0.2s"
+                  _hover={{ opacity: 1 }}
+                />
+              ))}
+            </HStack>
+
             <MotionBox
               position="absolute"
               top="50%"
